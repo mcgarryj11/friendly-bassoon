@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unique Word Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      max-width: 600px;
+    }
+    input, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    ul {
+      margin-top: 1rem;
+    }
+    .message {
+      margin-top: 0.5rem;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h2>Unique Word Tracker</h2>
+  <input type="text" id="wordInput" placeholder="Enter a word" />
+  <button onclick="addWord()">Add Word</button>
+  <div class="message" id="message"></div>
+  <ul id="wordList"></ul>
+
+  <script>
+    const seenWords = new Set();
+    const wordList = document.getElementById("wordList");
+    const message = document.getElementById("message");
+
+    function addWord() {
+      const input = document.getElementById("wordInput");
+      const word = input.value.trim().toLowerCase();
+      input.value = "";
+      message.textContent = "";
+
+      if (!word) {
+        message.textContent = "Please enter a word.";
+        return;
+      }
+
+      if (seenWords.has(word)) {
+        message.textContent = `'${word}' is a duplicate and will not be added.`;
+        return;
+      }
+
+      seenWords.add(word);
+      const li = document.createElement("li");
+      li.textContent = word;
+      wordList.appendChild(li);
+    }
+  </script>
+</body>
+</html>
