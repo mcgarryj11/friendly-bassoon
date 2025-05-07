@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Word Tracker - Filtered</title>
+  <title>Word Tracker</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -37,63 +37,63 @@
   <ul id="wordList"></ul>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const seenWords = new Set();
-      const wordList = document.getElementById("wordList");
-      const message = document.getElementById("message");
-      const counter = document.getElementById("counter");
-      const inputField = document.getElementById("wordInput");
-      const addButton = document.getElementById("addButton");
+    const wordInput = document.getElementById("wordInput");
+    const wordList = document.getElementById("wordList");
+    const message = document.getElementById("message");
+    const counter = document.getElementById("counter");
+    const addButton = document.getElementById("addButton");
+    const seenWords = new Set();
+    const forbiddenLetters = new Set(['l', 'y', 'u', 'p']);
 
-      const forbiddenLetters = new Set(['l', 'y', 'u', 'p']);
+    function containsForbiddenLetter(word) {
+      return [...word].some(char => forbiddenLetters.has(char));
+    }
 
-      function containsForbiddenLetter(word) {
-        return [...word].some(char => forbiddenLetters.has(char));
+    function addWord() {
+      const word = wordInput.value.trim().toLowerCase();
+      wordInput.value = "";
+      message.textContent = "";
+
+      if (word.length !== 5) {
+        message.textContent = "Word must be exactly 5 letters.";
+        return;
       }
 
-      function addWord() {
-        const word = inputField.value.trim().toLowerCase();
-        inputField.value = "";
-        message.textContent = "";
-
-        if (word.length !== 5) {
-          message.textContent = "Word must be exactly 5 letters.";
-          return;
-        }
-
-        if (word[1] !== 'a') {
-          message.textContent = "The second letter must be 'a'.";
-          return;
-        }
-
-        if (containsForbiddenLetter(word)) {
-          message.textContent = "Word contains a forbidden letter: L, Y, U, or P.";
-          return;
-        }
-
-        if (seenWords.has(word)) {
-          message.textContent = `'${word}' is a duplicate and will not be added.`;
-          return;
-        }
-
-        seenWords.add(word);
-        const li = document.createElement("li");
-        li.textContent = word;
-        wordList.appendChild(li);
-        counter.textContent = seenWords.size;
+      if (word[1] !== 'a') {
+        message.textContent = "The second letter must be 'a'.";
+        return;
       }
 
-      // Button click
-      addButton.addEventListener("click", addWord);
+      if (containsForbiddenLetter(word)) {
+        message.textContent = "Word contains a forbidden letter: L, Y, U, or P.";
+        return;
+      }
 
-      // Enter key support
-      inputField.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          addWord();
-        }
-      });
+      if (seenWords.has(word)) {
+        message.textContent = `'${word}' is a duplicate and will not be added.`;
+        return;
+      }
+
+      seenWords.add(word);
+      const li = document.createElement("li");
+      li.textContent = word;
+      wordList.appendChild(li);
+      counter.textContent = seenWords.size;
+    }
+
+    // Add word on button click
+    addButton.addEventListener("click", addWord);
+
+    // Add word on Enter key
+    wordInput.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addWord();
+      }
     });
+
+    // Optional: autofocus input on load
+    window.onload = () => wordInput.focus();
   </script>
 </body>
 </html>
