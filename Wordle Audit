@@ -48,8 +48,9 @@
       input.value = "";
       message.textContent = "";
 
+      // Reject anything not 5 letters with 'a' in the second position
       if (word.length !== 5 || word[1] !== 'a') {
-        message.textContent = "Word must be 5 letters long with 'a' as the second letter.";
+        message.textContent = "Word must be exactly 5 letters with 'a' as the second letter.";
         return;
       }
 
@@ -58,14 +59,15 @@
         return;
       }
 
+      // Add valid, unique word
       seenWords.add(word);
       const li = document.createElement("li");
       li.textContent = word;
       wordList.appendChild(li);
-
       counter.textContent = seenWords.size;
     }
   </script>
 </body>
 </html>
+
 
