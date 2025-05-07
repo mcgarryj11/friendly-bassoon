@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Word Tracker - 2nd Letter A</title>
+  <title>Word Tracker - Filtered</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -29,7 +29,7 @@
   </style>
 </head>
 <body>
-  <h2>5-Letter Words with 2nd Letter 'A'</h2>
+  <h2>5-Letter Words with 2nd Letter 'A' (No L, Y, U, P)</h2>
   <input type="text" id="wordInput" placeholder="Enter a 5-letter word" />
   <button onclick="addWord()">Add Word</button>
   <div class="message" id="message"></div>
@@ -42,15 +42,31 @@
     const message = document.getElementById("message");
     const counter = document.getElementById("counter");
 
+    // Set of disallowed letters
+    const forbiddenLetters = new Set(['l', 'y', 'u', 'p']);
+
+    function containsForbiddenLetter(word) {
+      return [...word].some(char => forbiddenLetters.has(char));
+    }
+
     function addWord() {
       const input = document.getElementById("wordInput");
       const word = input.value.trim().toLowerCase();
       input.value = "";
       message.textContent = "";
 
-      // Reject anything not 5 letters with 'a' in the second position
-      if (word.length !== 5 || word[1] !== 'a') {
-        message.textContent = "Word must be exactly 5 letters with 'a' as the second letter.";
+      if (word.length !== 5) {
+        message.textContent = "Word must be exactly 5 letters.";
+        return;
+      }
+
+      if (word[1] !== 'a') {
+        message.textContent = "The second letter must be 'a'.";
+        return;
+      }
+
+      if (containsForbiddenLetter(word)) {
+        message.textContent = "Word contains a forbidden letter: L, Y, U, or P.";
         return;
       }
 
@@ -59,7 +75,7 @@
         return;
       }
 
-      // Add valid, unique word
+      // Valid word
       seenWords.add(word);
       const li = document.createElement("li");
       li.textContent = word;
@@ -69,5 +85,6 @@
   </script>
 </body>
 </html>
+
 
 
